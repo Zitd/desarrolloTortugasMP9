@@ -17,27 +17,24 @@ class Servidor {
         int PUERTO = 4321;
         serverSocket = new ServerSocket(PUERTO);
         socket = new Socket();
-
     }
 
     void initServer() throws IOException {
-        boolean salida = false;
-
+        boolean salida = false;//Esta variable indicará la salida del servidor
         System.out.println("Esperando al cliente...");
-        socket = serverSocket.accept();
+        socket = serverSocket.accept();//Aceptamos al cliente
         System.out.println("Cliente conectado...");
-        ArrayList<Tortuga> tortugas = new ArrayList<>();
+        ArrayList<Tortuga> tortugas = new ArrayList<>();//Almacén de tortugas
         String menu;
 
-        DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente cliente.writeUTF("Petición recibida y aceptada");
+        DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente
         BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         cliente.writeUTF("Cliente conectado");
 
 
         while(!salida){
             System.out.println("El cliente esta usando el menú. . .");
-            menu = entrada.readLine();
-            menu= menu.trim();
+            menu = entrada.readLine().trim();
 
             switch (menu) {
                 case "1"://Añadir tortuga
@@ -65,51 +62,49 @@ class Servidor {
         socket.close();
         serverSocket.close();
     }
-
+//MOSTRAR UNA UNICA TORTUGA (DESDE UNA POSICION DEL ARRAYLIST)
     private String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
         String frase;
         Tortuga tortuga = tortugas.get(n);
         frase= ("tortuga de nombre " +tortuga.getNombre()+" y dorsal "+tortuga.getDorsal());
-        return frase;
+        return frase;//Devuelve una frase lista para mostrar
     }
-
+//EMPEZAR CARRERA
     private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
         int numGanador;
         String confirmacion = null;
         System.out.println("El cliente ha empezado una carrera");
-        if (tortugas.size() > 1) {
+        if (tortugas.size() > 1) {//Comprobamos que hayan suficientes tortugas
             for (int i = 0; i < tortugas.size(); i++) {
-                Carrera temp = new Carrera(" " + i);
+                Carrera temp = new Carrera(" " + i);//Mandamos un numero como representante de las tortugas
                 temp.start();
             }
-            while (confirmacion == null) {
-                System.out.println("wile");
+            while (confirmacion == null) {//Repetir hasta que haya sido elegido un ganador
                 if (Carrera.ganador != null) {
-                    System.out.println("ifi");
-                    numGanador = Integer.parseInt(Carrera.ganador.trim());
+                    numGanador = Integer.parseInt(Carrera.ganador.trim());//Cogemos el nombre del ganador y lo pasamos a int
                     cliente.writeUTF("Ganador la " + ViewArraylistItem(tortugas,numGanador));
                     System.out.println("Ganador " + ViewArraylistItem(tortugas,numGanador));
-                    confirmacion="ACK";
+                    confirmacion="ACK";//Damos un valor no nulo, que se reiniciara cada vez que se llame este metodo
                 }
             }
-            Carrera.ganador = null;
+            Carrera.ganador = null;//Ponemos el valor del ganador a nulo para repetir otra carrera
         }
         else {
-            cliente.writeUTF("fallo");
+            cliente.writeUTF("fallo");//en caso de que no hayan suficientes tortugas enviaremos un fallo
         }
     }
-
-    private void showTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {//mostramos las tortugas
+//MOSTRAMOS TODAS LAS TORTUGAS DEL ARRAYLIST
+    private void showTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
         System.out.println("El cliente está viendo las tortugas");
 
-        if(tortugas.size() != 0) {
+        if(tortugas.size() != 0) {//Si hay tortugas en el arraylist
             System.out.println("Mostrando tortugas");
             cliente.writeUTF("Mostrando tortugas");
-            Iterator itr = tortugas.iterator();
+            Iterator itr = tortugas.iterator();//Iterator para recorrer el arraylist junto a un bucle while
             int i = 0;
             while (itr.hasNext()) {
                 Tortuga tortuga = (Tortuga) itr.next();
-                i++;
+                i++; //Esto nos indicará el numero con el que podemos referenciar a nuestra tortuga pra eliminarla
                 cliente.writeUTF(i + ". Tortuga " + tortuga.getNombre() + " dorsal: " + tortuga.getDorsal());
             }
         }
@@ -120,31 +115,31 @@ class Servidor {
         cliente.writeUTF("fin");
     }
 
-    private void delTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {//eliminamos tortuga
+    private void delTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         String readCli;
         int eliminar;
         System.out.println("El cliente esta eliminando una tortuga");
-        if(tortugas.size() != 0){
+        if(tortugas.size() != 0){//Si no hay toprtugas que se salte el proceso e informe al usuario
             System.out.println("Eliminando tortugas");
             readCli = entrada.readLine()+"\n";
-            eliminar = Integer.parseInt(readCli.trim())-1;
-            if(eliminar<tortugas.size()){
+            eliminar = Integer.parseInt(readCli.trim())-1;//Aqui pasamos del valor recibido al valor necesario
+            if(eliminar<tortugas.size()){//Si el numero se encuentra en la lista que proceda con la eliminacion
             tortugas.remove(eliminar);
             cliente.writeUTF("La tortuga ha sido eliminada correctamente");
             }
             else {
-                cliente.writeUTF("Esa tortuga no se encuentra en la lista");
+                cliente.writeUTF("Esa tortuga no se encuentra en la lista");//Fallo Num. Demasiado alto
             }
         }
         else{
-            cliente.writeUTF("No existen tortugas que eliminar");
+            cliente.writeUTF("No existen tortugas que eliminar");//Fallo ArrayList vacia
         }
     }
 
-    private void addTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {//añadimos tortugas
+    private void addTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         String readCli;
         System.out.println("Añadiendo tortuga...");
-        Tortuga tortuga1 = new Tortuga();
+        Tortuga tortuga1 = new Tortuga(); //Creamos una nueva tortuga
         //Nombre
         readCli = entrada.readLine()+"\n";
         tortuga1.setNombre(readCli.trim());
@@ -153,10 +148,10 @@ class Servidor {
         readCli = entrada.readLine()+"\n";
         tortuga1.setDorsal( Integer.parseInt(readCli.trim()));
         System.out.println("Dortsal introducida");
-
+        //La añadimos a la lista
         tortugas.add(tortuga1);
         cliente.writeUTF("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
         System.out.println("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
-        System.out.println(tortugas.size()+" tortugas en memoria");
+        System.out.println(tortugas.size()+" tortugas en memoria");//Injdicamos las tortugas guardadas
     }
 }
