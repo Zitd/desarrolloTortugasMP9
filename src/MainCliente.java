@@ -10,4 +10,5 @@ MainCliente {
 }
 
 
-
+//TODO El case debe de ser solo llamadas a fragmentos d codigo
+//TODO Hay limpiar el codigo de variables y dar mas legibilidad

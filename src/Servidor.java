@@ -85,6 +85,7 @@ public class Servidor {
 
                         break;
                     case "4"://Carrera
+                        Carrera.run();
                         break;
                     case "5":
                         System.out.println("Saliendo. . .");
@@ -92,7 +93,6 @@ public class Servidor {
 
                         break;
                     default:
-
                         break;
                 }
             }
@@ -100,5 +100,9 @@ public class Servidor {
         System.out.println("Fin de la conexión");
         socket.close();
         serverSocket.close();
+    }
+    public static void Correr(){
+        Thread carrera = new Carrera();
+        carrera.start();
     }
 }

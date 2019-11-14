@@ -75,13 +75,13 @@ public class Cliente {
                     break;
 
                 case "4": //Empezar carrera
+                    System.out.println("Empezando carrera");
                     break;
+
                 case "5": //Salir
-                    System.out.println("¿Cerrar servidor ? S/N");
-                    menuTortuga = reader.nextLine(); //Leemos consola
-                    if(menuTortuga== "S"){
+                    System.out.println("Cerrando servidor. . .");
                         salidaServidor.writeUTF("5"+"\n");
-                    }
+
                     salida = 1; // Fin de este bucle
                     break;
                 default:
