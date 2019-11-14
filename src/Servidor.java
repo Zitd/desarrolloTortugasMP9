@@ -72,28 +72,33 @@ public class Servidor {
     private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         int numGanador;
         String confirmacion = null;
-        if (tortugas.size() != 0) {
+        System.out.println("El cliente ha empezado una carrera");
+        if (tortugas.size() > 1) {
             for (int i = 0; i < tortugas.size(); i++) {
                 Carrera temp = new Carrera(" " + i);
                 temp.start();
             }
-            while (confirmacion != ("ACK")) {
+            while (confirmacion == null) {
+                System.out.println("wile");
                 if (Carrera.ganador != null) {
+                    System.out.println("ifi");
                     numGanador = Integer.parseInt(Carrera.ganador.trim());
-                    System.out.println("Ganador " + tortugas.get(numGanador));
                     cliente.writeUTF("Ganador " + tortugas.get(numGanador));
-                    confirmacion = entrada.readLine().trim();
+                    System.out.println("Ganador " + tortugas.get(numGanador));
+                    confirmacion="ACK";
                 }
             }
+            confirmacion=null;
             Carrera.ganador = null;
         }
         else {
-            cliente.writeUTF("No hay tortugas");
-           System.out.println(entrada.readLine().trim());
+            cliente.writeUTF("fallo");
         }
     }
 
     private void showTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {//mostramos las tortugas
+        System.out.println("El cliente está viendo las tortugas");
+
         if(tortugas.size() != 0) {
             System.out.println("Mostrando tortugas");
             cliente.writeUTF("Mostrando tortugas");
@@ -115,6 +120,7 @@ public class Servidor {
     private void delTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {//eliminamos tortuga
         String readCli;
         int eliminar;
+        System.out.println("El cliente esta eliminando una tortuga");
         if(tortugas.size() != 0){
             System.out.println("Eliminando tortugas");
             readCli = entrada.readLine()+"\n";

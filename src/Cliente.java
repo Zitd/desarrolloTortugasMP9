@@ -79,9 +79,16 @@ public class Cliente {
     }
 
     private void cliCarrera(DataOutputStream salidaServidor, DataInputStream din) throws IOException {
+        String readServ;
         System.out.println("Empezando carrera");
-        System.out.println(din.readUTF());//Recibimos al ganador
-        salidaServidor.writeUTF("ACK");//confirmamos que ha llegado
+        readServ = din.readUTF();
+        if(readServ.equals("fallo")) {
+            System.out.println("No hay suficientes tortugas");
+        }
+        else {
+            System.out.println(readServ);//Escribimos al ganador
+            //salidaServidor.writeUTF("ACK\n");//confirmamos que ha llegado
+        }
     }
 
     private void seeTortugas(DataInputStream din) throws IOException {
