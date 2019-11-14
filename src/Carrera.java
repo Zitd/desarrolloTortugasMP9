@@ -2,7 +2,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Carrera extends Thread{
     static String ganador;
 
-    public Carrera(String s) {
+    Carrera(String s) {
         super(s);
     }
 
@@ -10,12 +10,7 @@ public class Carrera extends Thread{
     public void run(){
 
         int rnd = ThreadLocalRandom.current().nextInt(0, 500 + 1);
-       // System.out.println("La carrera de "+ getName()+" ha comenzado");
-        for(int i = 0;i>=500;i++){
-            i = i + rnd;
-        }
-       // System.out.println("La carrera de "+ getName()+" ha terminado");
-
+        for(int i = 0;i>=500;i++) i += rnd;//Bucle para carrera
         if (ganador == null){
             ganador = getName();
             System.out.println("Ganador elegido");

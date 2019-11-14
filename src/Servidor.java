@@ -8,75 +8,72 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class Servidor {
-    private final int PUERTO = 4321;
+class Servidor {
     private ServerSocket serverSocket;//Socket correspondiente al servidor
     private Socket socket; //Socket correspondiente al cliente
 
-    public Servidor() throws IOException {
+    Servidor() throws IOException {
         System.out.println("Iniciando servidor..");
+        int PUERTO = 4321;
         serverSocket = new ServerSocket(PUERTO);
         socket = new Socket();
 
     }
 
-    public void initServer() throws IOException {
+    void initServer() throws IOException {
         boolean salida = false;
 
-        do {
-            System.out.println("Esperando al cliente...");
-            socket = serverSocket.accept();
-            System.out.println("Cliente conectado...");
-            ArrayList<Tortuga> tortugas = new ArrayList<Tortuga>();
-            String menu = "9";
-            int numGanador;
+        System.out.println("Esperando al cliente...");
+        socket = serverSocket.accept();
+        System.out.println("Cliente conectado...");
+        ArrayList<Tortuga> tortugas = new ArrayList<>();
+        String menu;
 
-            DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente cliente.writeUTF("Petición recibida y aceptada");
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            cliente.writeUTF("Cliente conectado");
+        DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente cliente.writeUTF("Petición recibida y aceptada");
+        BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        cliente.writeUTF("Cliente conectado");
 
 
-            while(salida != true){
-                System.out.println("El cliente esta usando el menú. . .");
-                menu = entrada.readLine();
-                menu= menu.trim();
+        while(!salida){
+            System.out.println("El cliente esta usando el menú. . .");
+            menu = entrada.readLine();
+            menu= menu.trim();
 
-                switch (menu) {
-                    case "1"://Añadir tortuga
-                        addTortuga(tortugas, cliente, entrada);
-                        break;
-                    case "2": //Eliminar tortuga
-                        delTortuga(tortugas, cliente, entrada);
-                        break;
-                    case "3": //Mostrar tortuga
-                        showTortuga(tortugas, cliente);
-                        break;
-                    case "4"://Carrera
-                        startCarrera(tortugas, cliente, entrada);
-                        break;
-                    case "5":
-                        System.out.println("Saliendo. . .");
-                        salida = true;
-                        break;
-                    default:
-                        System.out.println("Fallo Default"); // En caso de que el cliente y el servidor se desincronizan
-                        break;
-                }
+            switch (menu) {
+                case "1"://Añadir tortuga
+                    addTortuga(tortugas, cliente, entrada);
+                    break;
+                case "2": //Eliminar tortuga
+                    delTortuga(tortugas, cliente, entrada);
+                    break;
+                case "3": //Mostrar tortuga
+                    showTortuga(tortugas, cliente);
+                    break;
+                case "4"://Carrera
+                    startCarrera(tortugas, cliente);
+                    break;
+                case "5":
+                    System.out.println("Saliendo. . .");
+                    salida = true;
+                    break;
+                default:
+                    System.out.println("Fallo Default"); // En caso de que el cliente y el servidor se desincronizan
+                    break;
             }
-        } while (salida != true);
+        }
         System.out.println("Fin de la conexión");
         socket.close();
         serverSocket.close();
     }
 
-    String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
+    private String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
         String frase;
         Tortuga tortuga = tortugas.get(n);
         frase= ("tortuga de nombre " +tortuga.getNombre()+" y dorsal "+tortuga.getDorsal());
         return frase;
     }
 
-    private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
+    private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
         int numGanador;
         String confirmacion = null;
         System.out.println("El cliente ha empezado una carrera");
@@ -95,7 +92,6 @@ public class Servidor {
                     confirmacion="ACK";
                 }
             }
-            confirmacion=null;
             Carrera.ganador = null;
         }
         else {
@@ -132,8 +128,13 @@ public class Servidor {
             System.out.println("Eliminando tortugas");
             readCli = entrada.readLine()+"\n";
             eliminar = Integer.parseInt(readCli.trim())-1;
+            if(eliminar<tortugas.size()){
             tortugas.remove(eliminar);
             cliente.writeUTF("La tortuga ha sido eliminada correctamente");
+            }
+            else {
+                cliente.writeUTF("Esa tortuga no se encuentra en la lista");
+            }
         }
         else{
             cliente.writeUTF("No existen tortugas que eliminar");

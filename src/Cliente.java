@@ -2,24 +2,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Cliente {
+class Cliente {
 
-    private final int PUERTO = 4321;
-    private final String HOST = "localhost";
     private Socket socket;
 
-    public Cliente() throws IOException {
+    Cliente() throws IOException {
         System.out.println("Iniciando cliente...");
+        int PUERTO = 4321;
+        String HOST = "localhost";
         socket = new Socket(HOST, PUERTO);
     }
 
-    public void initCliente() throws IOException {
+    void initCliente() throws IOException {
         //Variables
         Scanner reader = new Scanner(System.in);
         String menuTortuga;
         int salida = 0;
-        int test;
-        String mensajeServer;
         DataOutputStream salidaServidor;
         DataInputStream din = new DataInputStream(socket.getInputStream());
         salidaServidor = new DataOutputStream(socket.getOutputStream());
@@ -53,7 +51,7 @@ public class Cliente {
                     seeTortugas(din);
                     break;
                 case "4": //Empezar carrera
-                    cliCarrera(salidaServidor, din);
+                    cliCarrera(din);
                     break;
                 case "5": //Salir
                     System.out.println("Cerrando servidor. . .");
@@ -78,7 +76,7 @@ public class Cliente {
         System.out.println(din.readUTF());//Recibimos confirmación
     }
 
-    private void cliCarrera(DataOutputStream salidaServidor, DataInputStream din) throws IOException {
+    private void cliCarrera(DataInputStream din) throws IOException {
         String readServ;
         System.out.println("Empezando carrera");
         readServ = din.readUTF();
