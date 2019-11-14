@@ -40,31 +40,24 @@ public class Cliente {
 
             salidaServidor.writeUTF(menuTortuga+"\n");
                       /*Enviamos esa información al servidor
-            Necesita \n para decir que eso es to.do que es el final de la linea*/
+            Necesita \n para decir que es el final de la linea*/
 
             switch(menuTortuga){ //case de menú
                 case "1"://Añadir tortuga
                     addTortuga(reader, salidaServidor, din);
                     break;
-
                 case "2": //Eliminar tortuga
-                    System.out.println("¿Que tortuga deseas eliminar?");
-                    salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
-                    System.out.println(din.readUTF());//Eliminado
+                    delTortuga(reader, salidaServidor, din);
                     break;
-
                 case "3": //Ver tortugas
                     seeTortugas(din);
                     break;
-
                 case "4": //Empezar carrera
-                    System.out.println("Empezando carrera");
+                    cliCarrera(salidaServidor, din);
                     break;
-
                 case "5": //Salir
                     System.out.println("Cerrando servidor. . .");
-                        salidaServidor.writeUTF("5"+"\n");
-
+                    salidaServidor.writeUTF("5"+"\n");
                     salida = 1; // Fin de este bucle
                     break;
                 default:
@@ -79,9 +72,21 @@ public class Cliente {
         socket.close();
     }
 
+    private void delTortuga(Scanner reader, DataOutputStream salidaServidor, DataInputStream din) throws IOException {
+        System.out.println("¿Que tortuga deseas eliminar?");
+        salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
+        System.out.println(din.readUTF());//Recibimos confirmación
+    }
+
+    private void cliCarrera(DataOutputStream salidaServidor, DataInputStream din) throws IOException {
+        System.out.println("Empezando carrera");
+        System.out.println(din.readUTF());//Recibimos al ganador
+        salidaServidor.writeUTF("ACK");//confirmamos que ha llegado
+    }
+
     private void seeTortugas(DataInputStream din) throws IOException {
         String mensajeServer;
-        System.out.println("Mostrando tortugas\n");
+        System.out.println(din.readUTF()+"\n");
         while(true) {
             mensajeServer = din.readUTF();
             if (mensajeServer.equals("fin")){
