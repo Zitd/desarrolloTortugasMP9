@@ -69,6 +69,13 @@ public class Servidor {
         serverSocket.close();
     }
 
+    String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
+        String frase;
+        Tortuga tortuga = tortugas.get(n);
+        frase= ("tortuga de nombre " +tortuga.getNombre()+" y dorsal "+tortuga.getDorsal());
+        return frase;
+    }
+
     private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         int numGanador;
         String confirmacion = null;
@@ -83,8 +90,8 @@ public class Servidor {
                 if (Carrera.ganador != null) {
                     System.out.println("ifi");
                     numGanador = Integer.parseInt(Carrera.ganador.trim());
-                    cliente.writeUTF("Ganador " + tortugas.get(numGanador));
-                    System.out.println("Ganador " + tortugas.get(numGanador));
+                    cliente.writeUTF("Ganador la " + ViewArraylistItem(tortugas,numGanador));
+                    System.out.println("Ganador " + ViewArraylistItem(tortugas,numGanador));
                     confirmacion="ACK";
                 }
             }
