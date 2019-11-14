@@ -43,55 +43,26 @@ public class Servidor {
 
                 switch (menu) {
                     case "1"://Añadir tortuga
-                        System.out.println("Añadiendo tortuga...");
-                        Tortuga tortuga1 = new Tortuga();
-                        //Nombre
-                        menu = entrada.readLine()+"\n";
-                        tortuga1.setNombre(menu.trim());
-                        System.out.println("Nombre introducido");
-                        //Dorsal
-                        menu = entrada.readLine()+"\n";
-                        tortuga1.setDorsal( Integer.parseInt(menu.trim()));
-                        System.out.println("Dortsal introducida");
-
-                        tortugas.add(tortuga1);
-                        cliente.writeUTF("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
-                        System.out.println("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
-                        System.out.println(tortugas.size()+" tortugas en memoria");
-
+                        addTortuga(tortugas, cliente, entrada);
                         break;
 
                     case "2": //Eliminar tortuga
-                        System.out.println("Eliminando tortugas");
-                        menu = entrada.readLine()+"\n";
-                        eliminar = Integer.parseInt(menu.trim())-1;
-                        tortugas.remove(eliminar);
-                        cliente.writeUTF("La tortuga ha sido eliminada correctamente");
-
-
+                        delTortuga(tortugas, cliente, entrada);
                         break;
 
                     case "3": //Mostrar tortuga
-                        System.out.println("Mostrando tortugas");
-                        Iterator itr = tortugas.iterator();
-                        int i = 0;
-                        while(itr.hasNext()){
-                            Tortuga tortuga = (Tortuga)itr.next();
-                            i++;
-                            cliente.writeUTF(i+". Tortuga "+tortuga.getNombre()+" dorsal: "+tortuga.getDorsal());
-                        }
-                        cliente.writeUTF("fin");
-
-
+                        showTortuga(tortugas, cliente);
                         break;
+
                     case "4"://Carrera
-                        Carrera.run();
+                        //Carrera.run();
                         break;
+
                     case "5":
                         System.out.println("Saliendo. . .");
                         salida = 1;
-
                         break;
+                        
                     default:
                         break;
                 }
@@ -101,8 +72,49 @@ public class Servidor {
         socket.close();
         serverSocket.close();
     }
-    public static void Correr(){
+
+    private void showTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
+        System.out.println("Mostrando tortugas");
+        Iterator itr = tortugas.iterator();
+        int i = 0;
+        while(itr.hasNext()){
+            Tortuga tortuga = (Tortuga)itr.next();
+            i++;
+            cliente.writeUTF(i+". Tortuga "+tortuga.getNombre()+" dorsal: "+tortuga.getDorsal());
+        }
+        cliente.writeUTF("fin");
+    }
+
+    private void delTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
+        String menu;
+        int eliminar;
+        System.out.println("Eliminando tortugas");
+        menu = entrada.readLine()+"\n";
+        eliminar = Integer.parseInt(menu.trim())-1;
+        tortugas.remove(eliminar);
+        cliente.writeUTF("La tortuga ha sido eliminada correctamente");
+    }
+
+    private void addTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
+        String menu;
+        System.out.println("Añadiendo tortuga...");
+        Tortuga tortuga1 = new Tortuga();
+        //Nombre
+        menu = entrada.readLine()+"\n";
+        tortuga1.setNombre(menu.trim());
+        System.out.println("Nombre introducido");
+        //Dorsal
+        menu = entrada.readLine()+"\n";
+        tortuga1.setDorsal( Integer.parseInt(menu.trim()));
+        System.out.println("Dortsal introducida");
+
+        tortugas.add(tortuga1);
+        cliente.writeUTF("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
+        System.out.println("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
+        System.out.println(tortugas.size()+" tortugas en memoria");
+    }
+/*    public static void Correr(){
         Thread carrera = new Carrera();
         carrera.start();
-    }
+    }*/
 }

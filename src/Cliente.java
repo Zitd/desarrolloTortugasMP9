@@ -44,13 +44,7 @@ public class Cliente {
 
             switch(menuTortuga){ //case de menú
                 case "1"://Añadir tortuga
-                    System.out.println("Introduce el nombre de la tortuga");
-                    salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
-
-                    System.out.println("Introduce el dorsal de la tortuga");
-                    salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
-
-                    System.out.println(din.readUTF());// este mensaje nos sirve de confirmación
+                    addTortuga(reader, salidaServidor, din);
                     break;
 
                 case "2": //Eliminar tortuga
@@ -60,18 +54,7 @@ public class Cliente {
                     break;
 
                 case "3": //Ver tortugas
-
-                    System.out.println("Mostrando tortugas\n");
-                    while(true) {
-                        mensajeServer = din.readUTF();
-                        if (mensajeServer.equals("fin")){
-                            break;
-                        }
-                        System.out.println(mensajeServer);
-
-                    }
-
-
+                    seeTortugas(din);
                     break;
 
                 case "4": //Empezar carrera
@@ -94,6 +77,29 @@ public class Cliente {
         System.out.println("Cerrando cliente. . .");
 
         socket.close();
+    }
+
+    private void seeTortugas(DataInputStream din) throws IOException {
+        String mensajeServer;
+        System.out.println("Mostrando tortugas\n");
+        while(true) {
+            mensajeServer = din.readUTF();
+            if (mensajeServer.equals("fin")){
+                break;
+            }
+            System.out.println(mensajeServer);
+
+        }
+    }
+
+    private void addTortuga(Scanner reader, DataOutputStream salidaServidor, DataInputStream din) throws IOException {
+        System.out.println("Introduce el nombre de la tortuga");
+        salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
+
+        System.out.println("Introduce el dorsal de la tortuga");
+        salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
+
+        System.out.println(din.readUTF());// este mensaje nos sirve de confirmación
     }
 
 }
