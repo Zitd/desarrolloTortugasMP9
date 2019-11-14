@@ -21,6 +21,7 @@ public class Servidor {
     }
 
     public void initServer() throws IOException {
+        int salida = 0;
 
         do {
             System.out.println("Esperando al cliente...");
@@ -28,7 +29,6 @@ public class Servidor {
             System.out.println("Cliente conectado...");
             ArrayList<Tortuga> tortugas = new ArrayList<Tortuga>();
             String menu = "9";
-            int salida = 0;
             int eliminar;
 
             DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente cliente.writeUTF("Petición recibida y aceptada");
@@ -89,18 +89,16 @@ public class Servidor {
                     case "5":
                         System.out.println("Saliendo. . .");
                         salida = 1;
+
                         break;
                     default:
 
                         break;
-
-
                 }
             }
-
-            System.out.println("Fin de la conexión");
-
-            serverSocket.close();
-        } while (true);
+        } while (salida == 0);
+        System.out.println("Fin de la conexión");
+        socket.close();
+        serverSocket.close();
     }
 }
