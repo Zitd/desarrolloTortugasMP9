@@ -29,7 +29,7 @@ public class Servidor {
             ArrayList<Tortuga> tortugas = new ArrayList<Tortuga>();
             String menu = "9";
             int salida = 0;
-            int test;
+            int eliminar;
 
             DataOutputStream cliente = new DataOutputStream(socket.getOutputStream()); //Obtener la entrada del cliente cliente.writeUTF("Petición recibida y aceptada");
             BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -42,7 +42,7 @@ public class Servidor {
                 menu= menu.trim();
 
                 switch (menu) {
-                    case "1":
+                    case "1"://Añadir tortuga
                         System.out.println("Añadiendo tortuga...");
                         Tortuga tortuga1 = new Tortuga();
                         //Nombre
@@ -60,9 +60,18 @@ public class Servidor {
                         System.out.println(tortugas.size()+" tortugas en memoria");
 
                         break;
-                    case "2":
+
+                    case "2": //Eliminar tortuga
+                        System.out.println("Eliminando tortugas");
+                        menu = entrada.readLine()+"\n";
+                        eliminar = Integer.parseInt(menu.trim())-1;
+                        tortugas.remove(eliminar);
+                        cliente.writeUTF("La tortuga ha sido eliminada correctamente");
+
+
                         break;
-                    case "3":
+
+                    case "3": //Mostrar tortuga
                         System.out.println("Mostrando tortugas");
                         Iterator itr = tortugas.iterator();
                         int i = 0;
@@ -71,9 +80,11 @@ public class Servidor {
                             i++;
                             cliente.writeUTF(i+". Tortuga "+tortuga.getNombre()+" dorsal: "+tortuga.getDorsal());
                         }
+                        cliente.writeUTF("fin");
+
 
                         break;
-                    case "4":
+                    case "4"://Carrera
                         break;
                     case "5":
                         System.out.println("Saliendo. . .");

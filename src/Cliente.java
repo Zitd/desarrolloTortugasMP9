@@ -54,15 +54,24 @@ public class Cliente {
                     break;
 
                 case "2": //Eliminar tortuga
-
+                    System.out.println("¿Que tortuga deseas eliminar?");
+                    salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola
+                    System.out.println(din.readUTF());//Eliminado
                     break;
 
                 case "3": //Ver tortugas
 
                     System.out.println("Mostrando tortugas\n");
-                    while((mensajeServer = din.readUTF()) != null)
-                    System.out.println(mensajeServer)
-                            ;
+                    while(true) {
+                        mensajeServer = din.readUTF();
+                        if (mensajeServer.equals("fin")){
+                            break;
+                        }
+                        System.out.println(mensajeServer);
+
+                    }
+
+
                     break;
 
                 case "4": //Empezar carrera
