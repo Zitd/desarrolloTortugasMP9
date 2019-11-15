@@ -19,6 +19,8 @@ class Servidor {
         socket = new Socket();
     }
 
+
+
     void initServer() throws IOException {
         boolean salida = false;//Esta variable indicará la salida del servidor
         System.out.println("Esperando al cliente...");
@@ -62,14 +64,14 @@ class Servidor {
         socket.close();
         serverSocket.close();
     }
-//MOSTRAR UNA UNICA TORTUGA (DESDE UNA POSICION DEL ARRAYLIST)
-    private String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
+    //MOSTRAR UNA UNICA TORTUGA (DESDE UNA POSICION DEL ARRAYLIST)
+    static String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
         String frase;
         Tortuga tortuga = tortugas.get(n);
         frase= ("tortuga de nombre " +tortuga.getNombre()+" y dorsal "+tortuga.getDorsal());
         return frase;//Devuelve una frase lista para mostrar
     }
-//EMPEZAR CARRERA
+    //EMPEZAR CARRERA
     private void startCarrera(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
         int numGanador;
         String confirmacion = null;
@@ -93,7 +95,7 @@ class Servidor {
             cliente.writeUTF("fallo");//en caso de que no hayan suficientes tortugas enviaremos un fallo
         }
     }
-//MOSTRAMOS TODAS LAS TORTUGAS DEL ARRAYLIST
+    //MOSTRAMOS TODAS LAS TORTUGAS DEL ARRAYLIST
     private void showTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente) throws IOException {
         System.out.println("El cliente está viendo las tortugas");
 
@@ -114,7 +116,7 @@ class Servidor {
         }
         cliente.writeUTF("fin");
     }
-
+    //ELIMINAR TORTUGA
     private void delTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         String readCli;
         int eliminar;
@@ -124,8 +126,8 @@ class Servidor {
             readCli = entrada.readLine()+"\n";
             eliminar = Integer.parseInt(readCli.trim())-1;//Aqui pasamos del valor recibido al valor necesario
             if(eliminar<tortugas.size()){//Si el numero se encuentra en la lista que proceda con la eliminacion
-            tortugas.remove(eliminar);
-            cliente.writeUTF("La tortuga ha sido eliminada correctamente");
+                tortugas.remove(eliminar);
+                cliente.writeUTF("La tortuga ha sido eliminada correctamente");
             }
             else {
                 cliente.writeUTF("Esa tortuga no se encuentra en la lista");//Fallo Num. Demasiado alto
@@ -135,7 +137,7 @@ class Servidor {
             cliente.writeUTF("No existen tortugas que eliminar");//Fallo ArrayList vacia
         }
     }
-
+    //AÑADIR TORTUGA
     private void addTortuga(ArrayList<Tortuga> tortugas, DataOutputStream cliente, BufferedReader entrada) throws IOException {
         String readCli;
         System.out.println("Añadiendo tortuga...");
