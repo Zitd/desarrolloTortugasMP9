@@ -21,7 +21,7 @@ class Cliente {
         DataOutputStream salidaServidor;
         DataInputStream din = new DataInputStream(socket.getInputStream());
         salidaServidor = new DataOutputStream(socket.getOutputStream());
-        System.out.println(din.readUTF());//Recibimos la confirmacion del servidor
+        System.out.println(din.readUTF());//Recibimos la confirmación del servidor
         while (salida == 0){ //bucle while de menú
 
             //MENU
@@ -35,7 +35,7 @@ class Cliente {
 
 
             menuTortuga = reader.nextLine(); //Leemos datos por consola para el case
-            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la linea
+            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la línea
 
             switch(menuTortuga){ //Switch como menú
                 case "1"://Añadir tortuga
