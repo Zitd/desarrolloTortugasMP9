@@ -35,7 +35,7 @@ class Cliente {
 
 
             menuTortuga = reader.nextLine(); //Leemos datos por consola para el case
-            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la linea
+            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la línea
 
             switch(menuTortuga){ //Switch como menú
                 case "1"://Añadir tortuga

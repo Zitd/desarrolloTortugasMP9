@@ -11,7 +11,7 @@ public class Carrera extends Thread{
 
         int rnd = ThreadLocalRandom.current().nextInt(0, 500 + 1);//Creamos un numero aleatorio entre 0 y 500
         for(int i = 0;i>=500;i++) i += rnd;//Bucle para carrera
-        if (ganador == null){//El primero que entre cerrará este if para los demas que lo intenten
+        if (ganador == null){//El primero que entre cerrará este if para los demás que lo intenten
             ganador = getName();
             System.out.println("Ganador elegido");
         }
