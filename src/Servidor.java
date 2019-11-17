@@ -19,8 +19,6 @@ class Servidor {
         socket = new Socket();
     }
 
-
-
     void initServer() throws IOException {
         boolean salida = false;//Esta variable indicará la salida del servidor
         System.out.println("Esperando al cliente...");
@@ -65,7 +63,7 @@ class Servidor {
         serverSocket.close();
     }
     //MOSTRAR UNA UNICA TORTUGA (DESDE UNA POSICION DEL ARRAYLIST)
-    static String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
+    private String ViewArraylistItem(ArrayList<Tortuga> tortugas, int n) {
         String frase;
         Tortuga tortuga = tortugas.get(n);
         frase= ("tortuga de nombre " +tortuga.getNombre()+" y dorsal "+tortuga.getDorsal());
@@ -86,7 +84,7 @@ class Servidor {
                     numGanador = Integer.parseInt(Carrera.ganador.trim());//Cogemos el nombre del ganador y lo pasamos a int
                     cliente.writeUTF("Ganador la " + ViewArraylistItem(tortugas,numGanador));
                     System.out.println("Ganador " + ViewArraylistItem(tortugas,numGanador));
-                    confirmacion="ACK";//Damos un valor no nulo, que se reiniciara cada vez que se llame este método
+                    confirmacion="ACK";//Damos un valor no nulo, que se reiniciara cada vez que se llame este metodo
                 }
             }
             Carrera.ganador = null;//Ponemos el valor del ganador a nulo para repetir otra carrera
@@ -106,7 +104,7 @@ class Servidor {
             int i = 0;
             while (itr.hasNext()) {
                 Tortuga tortuga = (Tortuga) itr.next();
-                i++; //Esto nos indicará el numero con el que podemos referenciar a nuestra tortuga para eliminarla
+                i++; //Esto nos indicará el numero con el que podemos referenciar a nuestra tortuga pra eliminarla
                 cliente.writeUTF(i + ". Tortuga " + tortuga.getNombre() + " dorsal: " + tortuga.getDorsal());
             }
         }
@@ -124,13 +122,13 @@ class Servidor {
         if(tortugas.size() != 0){//Si no hay tortugas que se salte el proceso e informe al usuario
             System.out.println("Eliminando tortugas");
             readCli = entrada.readLine()+"\n";
-            eliminar = Integer.parseInt(readCli.trim())-1;//Aquí pasamos del valor recibido al valor necesario
-            if(eliminar<tortugas.size()){//Si el numero se encuentra en la lista que proceda con la eliminación
+            eliminar = Integer.parseInt(readCli.trim())-1;//Aqui pasamos del valor recibido al valor necesario
+            if(eliminar<tortugas.size()){//Si el numero se encuentra en la lista que proceda con la eliminacion
                 tortugas.remove(eliminar);
                 cliente.writeUTF("La tortuga ha sido eliminada correctamente");
             }
             else {
-                cliente.writeUTF("Esa tortuga no se encuentra en la lista");//Fallo Núm. Demasiado alto
+                cliente.writeUTF("Esa tortuga no se encuentra en la lista");//Fallo Num. Demasiado alto
             }
         }
         else{
@@ -149,11 +147,11 @@ class Servidor {
         //Dorsal
         readCli = entrada.readLine()+"\n";
         tortuga1.setDorsal( Integer.parseInt(readCli.trim()));
-        System.out.println("Dorsal introducido");
+        System.out.println("Dortsal introducida");
         //La añadimos a la lista
         tortugas.add(tortuga1);
         cliente.writeUTF("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
         System.out.println("La tortuga de nombre "+tortuga1.getNombre()+" y dorsal "+tortuga1.getDorsal()+" ha sido creada correctamente");
-        System.out.println(tortugas.size()+" tortugas en memoria");//Indicamos las tortugas guardadas
+        System.out.println(tortugas.size()+" tortugas en memoria");//Injdicamos las tortugas guardadas
     }
 }

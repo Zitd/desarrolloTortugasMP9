@@ -21,7 +21,7 @@ class Cliente {
         DataOutputStream salidaServidor;
         DataInputStream din = new DataInputStream(socket.getInputStream());
         salidaServidor = new DataOutputStream(socket.getOutputStream());
-        System.out.println(din.readUTF());//Recibimos la confirmación del servidor
+        System.out.println(din.readUTF());//Recibimos la confirmacion del servidor
         while (salida == 0){ //bucle while de menú
 
             //MENU
@@ -35,7 +35,7 @@ class Cliente {
 
 
             menuTortuga = reader.nextLine(); //Leemos datos por consola para el case
-            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la línea
+            salidaServidor.writeUTF(menuTortuga+"\n");//Enviamos esa información al servidor, Necesita \n para decir que es el final de la linea
 
             switch(menuTortuga){ //Switch como menú
                 case "1"://Añadir tortuga
@@ -65,13 +65,13 @@ class Cliente {
         System.out.println("Cerrando cliente. . .");
         socket.close();
     }
-//ELIMINAR TORTUGA
+    //ELIMINAR TORTUGA
     private void delTortuga(Scanner reader, DataOutputStream salidaServidor, DataInputStream din) throws IOException {
         System.out.println("¿Que tortuga deseas eliminar?");
         salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola y enviamos
         System.out.println(din.readUTF());//Recibimos confirmación
     }
-//EMPEZAR CARRERA
+    //EMPEZAR CARRERA
     private void cliCarrera(DataInputStream din) throws IOException {
         String readServ;
         System.out.println("Empezando carrera");
@@ -83,7 +83,7 @@ class Cliente {
             System.out.println(readServ);//Escribimos al ganador
         }
     }
-//VER TORTUGAS
+    //VER TORTUGAS
     private void seeTortugas(DataInputStream din) throws IOException {
         String mensajeServer;
         System.out.println(din.readUTF()+"\n");
@@ -96,7 +96,7 @@ class Cliente {
 
         }
     }
-//AÑADIR TORTUGA
+    //AÑADIR TORTUGA
     private void addTortuga(Scanner reader, DataOutputStream salidaServidor, DataInputStream din) throws IOException {
         System.out.println("Introduce el nombre de la tortuga");
         salidaServidor.writeUTF(reader.nextLine()+"\n"); //Leemos consola y enviamos
